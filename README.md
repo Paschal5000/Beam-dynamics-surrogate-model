@@ -45,8 +45,8 @@ To get this project up and running on your local machine, follow these steps.
 ### 1\. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd YOUR_REPO_NAME
+git clone https://github.com/Paschal5000/Beam-dynamics-surrogate-model.git
+cd Beam-dynamics-surrogate-model
 ```
 
 ### 2\. Create and Activate a Virtual Environment
