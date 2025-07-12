@@ -45,7 +45,7 @@ def calculate_w_max(k0, k1, damping_ratio, v):
 
 # --- Data Generation Setup ---
 param_limits = {
-    'k0': [10e6, 200e6],        # Foundation Stiffness
+    'k0': [1e6, 50e6],        # REDUCED: Lower and Wider Foundation Stiffness range
     'k1': [10e3, 200e3],        # Shear Modulus
     'damping': [0.01, 0.20],    # Damping Ratio (1% to 20%)
     'velocity': [10, 80]        # Load Velocity (m/s)
