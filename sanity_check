@@ -65,6 +65,6 @@ print("Running sanity check with parameters from the identified Figure 4.1...")
 predicted_w_max = calculate_w_max(k0_test, k1_test, damping_test, v_test)
 
 print(f"\n--- Results ---")
-print(f"Calculated Max Deflection: {predicted_w_max:.6f} meters")
+print(f"Calculated Max Deflection: {predicted_w_max:.6f} m"eters")
 print(f"Now, compare this value to the peak deflection shown on the plot in the thesis.")
-print("---------------")
+print("------------------")
