@@ -1,5 +1,5 @@
 # ==============================================================================
-#                      SCRIPT: sanity_check.py (Corrected)
+#                      SCRIPT: sanity_check.py (Updated)
 # ==============================================================================
 # This script performs a sanity check on the analytical function to ensure
 # it produces results consistent with the source thesis, using parameters
@@ -24,7 +24,6 @@ def calculate_w_max(k0, k1, damping_ratio, v):
 
     for n in range(1, N_modes + 1):
         lambda_n_sq = ((n * np.pi) / L)**2
-        
         # Check if damping is near zero to avoid division by zero in omega_d
         if np.isclose(damping_ratio, 0):
              omega_n_sq = (EI * (lambda_n_sq**2) + k0 + k1 * lambda_n_sq) / m
@@ -66,7 +65,6 @@ print("Running sanity check with parameters from the identified Figure 4.1...")
 predicted_w_max = calculate_w_max(k0_test, k1_test, damping_test, v_test)
 
 print(f"\n--- Results ---")
-# --- THIS LINE IS NOW CORRECTED ---
-print(f"Calculated Max Deflection: {predicted_w_max:.6f} meters")
+print(f"Calculated Max Deflection: {predicted_w_max:.6f} m"eters")
 print(f"Now, compare this value to the peak deflection shown on the plot in the thesis.")
-print("---------------")
+print("------------------")
