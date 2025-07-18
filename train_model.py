@@ -1,8 +1,8 @@
 # ==============================================================================
-#                      FINAL SCRIPT: train_model.py
+#           FINAL SCRIPT (Reproducible): train_model.py
 # ==============================================================================
 # This script builds, trains, and evaluates a neural network surrogate model
-# using the corrected dataset and methodology.
+# with reproducibility fixes to ensure consistent results.
 
 import pandas as pd
 import numpy as np
@@ -13,6 +13,11 @@ from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import matplotlib.pyplot as plt
 import time
 
+# --- FIX: Set a global random seed for reproducibility ---
+RANDOM_SEED = 42
+np.random.seed(RANDOM_SEED)
+tf.random.set_seed(RANDOM_SEED)
+
 # --- 1. Load Data ---
 print("Loading dataset...")
 df = pd.read_csv('beam_deflection_dataset.csv')
@@ -21,28 +26,37 @@ df = pd.read_csv('beam_deflection_dataset.csv')
 X = df[['k0', 'k1', 'damping', 'velocity']]
 y = df['w_max']
 
-# Split into training+validation (85%) and testing (15%)
-X_train_val, X_test, y_train_val, y_test = train_test_split(X, y, test_size=0.15, random_state=42)
-# Split the 85% block into final training (70%) and validation (15%)
-X_train, X_val, y_train, y_val = train_test_split(X_train_val, y_train_val, test_size=(0.15/0.85), random_state=42)
+# The 'random_state' parameter ensures the split is the same every time.
+X_train_val, X_test, y_train_val, y_test = train_test_split(X, y, test_size=0.15, random_state=RANDOM_SEED)
+X_train, X_val, y_train, y_val = train_test_split(X_train_val, y_train_val, test_size=(0.15/0.85), random_state=RANDOM_SEED)
 
-# Scale input features to a [0, 1] range
 scaler = MinMaxScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_val_scaled = scaler.transform(X_val)
 X_test_scaled = scaler.transform(X_test)
 print("Data pre-processing complete.")
 
-# --- 3. Build the ANN Model ---
-print("\nBuilding the model...")
+# --- 3. Build an Enhanced ANN Model ---
+print("\nBuilding an enhanced model with Dropout...")
 model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=(X_train_scaled.shape[1],)),
+    
+    # Deeper and wider architecture
+    tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.Dropout(0.2), # Add Dropout layer to prevent overfitting
+    
     tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.2), # Add another Dropout layer
+    
     tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(32, activation='relu'),
-    tf.keras.layers.Dense(1)
+    
+    tf.keras.layers.Dense(1) # Output layer
 ])
-model.compile(optimizer='adam', loss='mean_squared_error')
+
+# Use a lower learning rate for the Adam optimizer
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.0005)
+
+model.compile(optimizer=optimizer, loss='mean_squared_error')
 model.summary()
 
 # --- 4. Train the Model ---
