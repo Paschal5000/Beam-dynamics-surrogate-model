@@ -73,7 +73,7 @@ rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 print(f"Final R² Score: {r2:.4f}")
 print(f"Final RMSE: {rmse:.4f}")
 
-# --- 6. Visualize Results ---
+#--- 6. Visualize Results ---
 plt.figure(figsize=(12, 5))
 plt.subplot(1, 2, 1)
 plt.plot(history.history['loss'], label='Training Loss')
@@ -94,3 +94,8 @@ plt.show()
 print("\nSaving model...")
 model.save('surrogate_model.h5')
 print("Model saved successfully as 'surrogate_model.h5'")
+
+# --- 5. Save the Final Model ---
+print("\nSaving RF model...")
+joblib.dump(rf_model, 'random_forest_surrogate_model.joblib')
+print("Model saved as 'random_forest_surrogate_model.joblib'")
